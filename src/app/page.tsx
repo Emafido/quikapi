@@ -1,65 +1,159 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { motion } from "framer-motion";
+import Navbar from "@/components/Navbar";
+import Builder from "@/components/Builder";
+import EndpointList from "@/components/EndpointList";
+
+type Schema = {
+  name: string;
+  description: string;
+  resources: {
+    name: string;
+    fields: { name: string; type: string; required: boolean }[];
+  }[];
+};
 
 export default function Home() {
+  const [deployed, setDeployed] = useState<{
+    apiId: string;
+    schema: Schema;
+  } | null>(null);
+
+  function handleDeploy(apiId: string, schema: Schema) {
+    setDeployed({ apiId, schema });
+    setTimeout(() => {
+      document
+        .getElementById("endpoints")
+        ?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main style={{ minHeight: "100vh", background: "var(--bg)" }}>
+      <Navbar />
+
+      {/* Hero */}
+      <section
+        className="dot-grid"
+        style={{ paddingTop: "8rem", paddingBottom: "5rem", paddingLeft: "1.5rem", paddingRight: "1.5rem" }}
+      >
+        <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
+
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            style={{ display: "flex", justifyContent: "center", marginBottom: "2rem" }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                padding: "0.375rem 0.875rem",
+                borderRadius: "9999px",
+                border: "1px solid var(--border)",
+                background: "var(--card)",
+                color: "var(--muted)",
+                fontFamily: "var(--mono)",
+                fontSize: "0.75rem",
+              }}
+            >
+              <span style={{ width: "0.375rem", height: "0.375rem", borderRadius: "9999px", background: "#10B981", display: "inline-block" }} />
+              Powered by Groq · Deployed on QuikDB
+            </div>
+          </motion.div>
+
+          {/* Heading */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.05 }}
+            style={{ textAlign: "center", marginBottom: "3rem" }}
           >
-            Documentation
-          </a>
+            <h1
+              className="font-serif"
+              style={{
+                fontSize: "clamp(3rem, 8vw, 5rem)",
+                lineHeight: 1.1,
+                color: "var(--fg)",
+                marginBottom: "1.25rem",
+              }}
+            >
+              Describe an API.
+              <br />
+              <em>Get a live one.</em>
+            </h1>
+            <p style={{ fontSize: "1rem", color: "var(--muted)", maxWidth: "28rem", margin: "0 auto" }}>
+              Type what you need in plain English. QuikAPI generates the schema,
+              creates the endpoints, and hands you live URLs in seconds.
+            </p>
+          </motion.div>
+
+          {/* Builder */}
+          <motion.div
+            initial={{ opacity: 0, y: 32 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            style={{ maxWidth: "42rem", margin: "0 auto" }}
+          >
+            <Builder onDeploy={handleDeploy} />
+          </motion.div>
+
+          {/* Endpoints */}
+          {deployed && (
+            <div id="endpoints" style={{ maxWidth: "42rem", margin: "0 auto" }}>
+              <EndpointList apiId={deployed.apiId} schema={deployed.schema} />
+            </div>
+          )}
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* How it works */}
+      <section style={{ borderTop: "1px solid var(--border)", padding: "5rem 1.5rem" }}>
+        <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
+          <h2
+            className="font-serif"
+            style={{ fontSize: "2rem", color: "var(--fg)", textAlign: "center", marginBottom: "3rem" }}
+          >
+            How it works
+          </h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1.5rem" }}>
+            {[
+              { step: "01", title: "Describe", body: "Type what your API should do in plain English. No technical jargon required." },
+              { step: "02", title: "Generate", body: "AI parses your description and produces a clean, structured schema with resources and fields." },
+              { step: "03", title: "Deploy", body: "One click. Your API is live with full CRUD endpoints ready to accept real requests." },
+            ].map((item, i) => (
+              <motion.div
+                key={item.step}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                style={{
+                  padding: "1.5rem",
+                  borderRadius: "1rem",
+                  border: "1px solid var(--border)",
+                  background: "var(--card)",
+                }}
+              >
+                <span style={{ fontFamily: "var(--mono)", fontSize: "0.75rem", color: "var(--accent)" }}>
+                  {item.step}
+                </span>
+                <h3 className="font-serif" style={{ fontSize: "1.35rem", margin: "0.5rem 0 0.5rem" }}>
+                  {item.title}
+                </h3>
+                <p style={{ fontSize: "0.875rem", color: "var(--muted)", lineHeight: 1.6 }}>
+                  {item.body}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }

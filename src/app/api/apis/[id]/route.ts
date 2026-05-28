@@ -1,6 +1,4 @@
 import { db } from "@/db";
-import { apis } from "@/db/schema";
-import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -9,12 +7,8 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const api = await db.select().from(apis).where(eq(apis.id, id)).get();
-
-    if (!api) {
-      return NextResponse.json({ error: "API not found" }, { status: 404 });
-    }
-
+    const api = db.getApiById(id);
+    if (!api) return NextResponse.json({ error: "API not found" }, { status: 404 });
     return NextResponse.json({ api });
   } catch (err) {
     console.error(err);
@@ -28,7 +22,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    await db.delete(apis).where(eq(apis.id, id));
+    db.deleteApi(id);
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error(err);

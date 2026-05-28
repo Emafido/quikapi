@@ -1,27 +1,101 @@
-import { Database } from "bun:sqlite";
-import { drizzle } from "drizzle-orm/bun-sqlite";
-import * as schema from "./schema";
+import { readFileSync, writeFileSync, existsSync } from "fs";
+import { join } from "path";
 
-const sqlite = new Database("quikapi.db", { create: true });
+const DB_PATH = join(process.cwd(), "quikapi-data.json");
 
-sqlite.exec(`PRAGMA journal_mode = WAL;`);
+interface Api {
+  id: string;
+  name: string;
+  description: string;
+  schema: string;
+  createdAt: string;
+}
 
-sqlite.exec(`
-  CREATE TABLE IF NOT EXISTS apis (
-    id TEXT PRIMARY KEY,
-    name TEXT NOT NULL,
-    description TEXT NOT NULL,
-    schema TEXT NOT NULL,
-    created_at TEXT DEFAULT (datetime('now'))
-  );
+interface Record {
+  id: string;
+  apiId: string;
+  resource: string;
+  data: string;
+  createdAt: string;
+}
 
-  CREATE TABLE IF NOT EXISTS records (
-    id TEXT PRIMARY KEY,
-    api_id TEXT NOT NULL REFERENCES apis(id) ON DELETE CASCADE,
-    resource TEXT NOT NULL,
-    data TEXT NOT NULL,
-    created_at TEXT DEFAULT (datetime('now'))
-  );
-`);
+interface DB {
+  apis: Api[];
+  records: Record[];
+}
 
-export const db = drizzle(sqlite, { schema });
+function readDB(): DB {
+  if (!existsSync(DB_PATH)) {
+    return { apis: [], records: [] };
+  }
+  try {
+    return JSON.parse(readFileSync(DB_PATH, "utf-8"));
+  } catch {
+    return { apis: [], records: [] };
+  }
+}
+
+function writeDB(data: DB): void {
+  writeFileSync(DB_PATH, JSON.stringify(data, null, 2), "utf-8");
+}
+
+export const db = {
+  // APIs
+  getAllApis(): Api[] {
+    return readDB().apis.sort((a, b) =>
+      a.createdAt.localeCompare(b.createdAt)
+    );
+  },
+
+  getApiById(id: string): Api | undefined {
+    return readDB().apis.find((a) => a.id === id);
+  },
+
+  insertApi(api: Omit<Api, "createdAt">): Api {
+    const data = readDB();
+    const newApi: Api = { ...api, createdAt: new Date().toISOString() };
+    data.apis.push(newApi);
+    writeDB(data);
+    return newApi;
+  },
+
+  deleteApi(id: string): void {
+    const data = readDB();
+    data.apis = data.apis.filter((a) => a.id !== id);
+    data.records = data.records.filter((r) => r.apiId !== id);
+    writeDB(data);
+  },
+
+  // Records
+  getRecords(apiId: string, resource: string): Record[] {
+    return readDB().records.filter(
+      (r) => r.apiId === apiId && r.resource === resource
+    );
+  },
+
+  insertRecord(record: Omit<Record, "createdAt">): Record {
+    const data = readDB();
+    const newRecord: Record = {
+      ...record,
+      createdAt: new Date().toISOString(),
+    };
+    data.records.push(newRecord);
+    writeDB(data);
+    return newRecord;
+  },
+
+  updateRecord(id: string, newData: string): boolean {
+    const data = readDB();
+    const idx = data.records.findIndex((r) => r.id === id);
+    if (idx === -1) return false;
+    data.records[idx].data = newData;
+    writeDB(data);
+    return true;
+  },
+
+  deleteRecord(id: string): void {
+    const data = readDB();
+    data.records = data.records.filter((r) => r.id !== id);
+    writeDB(data);
+  },
+};

@@ -9,7 +9,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "drizzle-orm": "^0.45.2",
     "framer-motion": "^12.40.0",
     "groq-sdk": "^1.2.0",
     "next": "16.2.6",
@@ -19,11 +18,11 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/better-sqlite3": "^7.6.13",
     "@types/bun": "^1.3.14",
     "@types/node": "^25.9.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "drizzle-kit": "^0.31.10",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "tailwindcss": "^4",
