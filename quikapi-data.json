@@ -1,18 +1,11 @@
 {
   "apis": [
     {
-      "id": "95dd2450-ef55-4203-bc08-671ddd60b535",
-      "name": "example_api",
-      "description": "A simple example API.",
-      "schema": "{\"name\":\"example_api\",\"description\":\"A simple example API.\",\"resources\":[{\"name\":\"students\",\"fields\":[{\"name\":\"name\",\"type\":\"string\",\"required\":true},{\"name\":\"age\",\"type\":\"number\",\"required\":true}]},{\"name\":\"orders\",\"fields\":[{\"name\":\"id\",\"type\":\"string\",\"required\":true},{\"name\":\"total\",\"type\":\"number\",\"required\":true},{\"name\":\"paid\",\"type\":\"boolean\",\"required\":true}]},{\"name\":\"blog_posts\",\"fields\":[{\"name\":\"title\",\"type\":\"string\",\"required\":true},{\"name\":\"content\",\"type\":\"string\",\"required\":false},{\"name\":\"published\",\"type\":\"boolean\",\"required\":true}]}]}",
-      "createdAt": "2026-05-27T23:06:31.609Z"
-    },
-    {
-      "id": "00e4d9bc-c603-41fc-b8ea-cc0551f81a53",
-      "name": "Ecommerce API",
-      "description": "API for managing products, categories, and reviews in an e-commerce store",
-      "schema": "{\"name\":\"Ecommerce API\",\"description\":\"API for managing products, categories, and reviews in an e-commerce store\",\"resources\":[{\"name\":\"products\",\"fields\":[{\"name\":\"name\",\"type\":\"string\",\"required\":true},{\"name\":\"description\",\"type\":\"string\",\"required\":true},{\"name\":\"price\",\"type\":\"number\",\"required\":true},{\"name\":\"category_id\",\"type\":\"number\",\"required\":true}]},{\"name\":\"categories\",\"fields\":[{\"name\":\"name\",\"type\":\"string\",\"required\":true},{\"name\":\"description\",\"type\":\"string\",\"required\":false}]},{\"name\":\"reviews\",\"fields\":[{\"name\":\"rating\",\"type\":\"number\",\"required\":true},{\"name\":\"comment\",\"type\":\"string\",\"required\":true},{\"name\":\"product_id\",\"type\":\"number\",\"required\":true}]}]}",
-      "createdAt": "2026-05-27T23:10:15.310Z"
+      "id": "6fc02b93-46cf-432c-b640-3004897b033f",
+      "name": "Book API",
+      "description": "API for managing books",
+      "schema": "{\"name\":\"Book API\",\"description\":\"API for managing books\",\"resources\":[{\"name\":\"books\",\"fields\":[{\"name\":\"title\",\"type\":\"string\",\"required\":true},{\"name\":\"author\",\"type\":\"string\",\"required\":true},{\"name\":\"published\",\"type\":\"number\",\"required\":false}]}]}",
+      "createdAt": "2026-05-30T12:30:33.612Z"
     }
   ],
   "records": []

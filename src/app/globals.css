@@ -34,3 +34,50 @@ body {
 
 .font-serif { font-family: var(--serif); }
 .font-mono { font-family: var(--mono); }
+
+/* Driver.js tour customization */
+.quikapi-tour .driver-popover-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.1rem;
+  color: #0D0D0D;
+}
+
+.quikapi-tour .driver-popover-description {
+  font-size: 0.82rem;
+  color: #6B7280;
+  line-height: 1.6;
+  margin-top: 0.4rem;
+}
+
+.quikapi-tour .driver-popover-next-btn {
+  background: #4F46E5 !important;
+  border: none !important;
+  color: #fff !important;
+  border-radius: 0.5rem !important;
+  font-size: 0.8rem !important;
+  padding: 0.4rem 0.875rem !important;
+}
+
+.quikapi-tour .driver-popover-prev-btn {
+  border: 1px solid #E5E4E1 !important;
+  color: #6B7280 !important;
+  border-radius: 0.5rem !important;
+  font-size: 0.8rem !important;
+  padding: 0.4rem 0.875rem !important;
+  background: transparent !important;
+}
+
+.quikapi-tour .driver-popover-done-btn {
+  background: #059669 !important;
+  border: none !important;
+  color: #fff !important;
+  border-radius: 0.5rem !important;
+  font-size: 0.8rem !important;
+  padding: 0.4rem 0.875rem !important;
+}
+
+.quikapi-tour .driver-popover-progress-text {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  color: #6B7280;
+}

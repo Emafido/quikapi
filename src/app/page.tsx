@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Builder from "@/components/Builder";
 import EndpointList from "@/components/EndpointList";
+import Walkthrough from "@/components/Walkthrough";
 
 type Schema = {
   name: string;
@@ -37,16 +38,21 @@ export default function Home() {
       {/* Hero */}
       <section
         className="dot-grid"
-        style={{ paddingTop: "8rem", paddingBottom: "5rem", paddingLeft: "1.5rem", paddingRight: "1.5rem" }}
+        style={{
+          paddingTop: "8rem",
+          paddingBottom: "5rem",
+          paddingLeft: "1.5rem",
+          paddingRight: "1.5rem",
+        }}
       >
         <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
 
-          {/* Badge */}
+          {/* Badge + Tour */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            style={{ display: "flex", justifyContent: "center", marginBottom: "2rem" }}
+            style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "0.75rem", marginBottom: "2rem", flexWrap: "wrap" }}
           >
             <div
               style={{
@@ -62,9 +68,19 @@ export default function Home() {
                 fontSize: "0.75rem",
               }}
             >
-              <span style={{ width: "0.375rem", height: "0.375rem", borderRadius: "9999px", background: "#10B981", display: "inline-block" }} />
+              <span
+                style={{
+                  width: "0.375rem",
+                  height: "0.375rem",
+                  borderRadius: "9999px",
+                  background: "#10B981",
+                  display: "inline-block",
+                  flexShrink: 0,
+                }}
+              />
               Powered by Groq · Deployed on QuikDB
             </div>
+            <Walkthrough />
           </motion.div>
 
           {/* Heading */}
@@ -87,7 +103,14 @@ export default function Home() {
               <br />
               <em>Get a live one.</em>
             </h1>
-            <p style={{ fontSize: "1rem", color: "var(--muted)", maxWidth: "28rem", margin: "0 auto" }}>
+            <p
+              style={{
+                fontSize: "1rem",
+                color: "var(--muted)",
+                maxWidth: "28rem",
+                margin: "0 auto",
+              }}
+            >
               Type what you need in plain English. QuikAPI generates the schema,
               creates the endpoints, and hands you live URLs in seconds.
             </p>
@@ -113,19 +136,44 @@ export default function Home() {
       </section>
 
       {/* How it works */}
-      <section style={{ borderTop: "1px solid var(--border)", padding: "5rem 1.5rem" }}>
+      <section
+        style={{ borderTop: "1px solid var(--border)", padding: "5rem 1.5rem" }}
+      >
         <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
           <h2
             className="font-serif"
-            style={{ fontSize: "2rem", color: "var(--fg)", textAlign: "center", marginBottom: "3rem" }}
+            style={{
+              fontSize: "2rem",
+              color: "var(--fg)",
+              textAlign: "center",
+              marginBottom: "3rem",
+            }}
           >
             How it works
           </h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1.5rem" }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+              gap: "1.5rem",
+            }}
+          >
             {[
-              { step: "01", title: "Describe", body: "Type what your API should do in plain English. No technical jargon required." },
-              { step: "02", title: "Generate", body: "AI parses your description and produces a clean, structured schema with resources and fields." },
-              { step: "03", title: "Deploy", body: "One click. Your API is live with full CRUD endpoints ready to accept real requests." },
+              {
+                step: "01",
+                title: "Describe",
+                body: "Type what your API should do in plain English. No technical jargon required.",
+              },
+              {
+                step: "02",
+                title: "Generate",
+                body: "AI parses your description and produces a clean, structured schema with resources and fields.",
+              },
+              {
+                step: "03",
+                title: "Deploy",
+                body: "One click. Your API is live with full CRUD endpoints ready to accept real requests.",
+              },
             ].map((item, i) => (
               <motion.div
                 key={item.step}
@@ -140,13 +188,28 @@ export default function Home() {
                   background: "var(--card)",
                 }}
               >
-                <span style={{ fontFamily: "var(--mono)", fontSize: "0.75rem", color: "var(--accent)" }}>
+                <span
+                  style={{
+                    fontFamily: "var(--mono)",
+                    fontSize: "0.75rem",
+                    color: "var(--accent)",
+                  }}
+                >
                   {item.step}
                 </span>
-                <h3 className="font-serif" style={{ fontSize: "1.35rem", margin: "0.5rem 0 0.5rem" }}>
+                <h3
+                  className="font-serif"
+                  style={{ fontSize: "1.35rem", margin: "0.5rem 0" }}
+                >
                   {item.title}
                 </h3>
-                <p style={{ fontSize: "0.875rem", color: "var(--muted)", lineHeight: 1.6 }}>
+                <p
+                  style={{
+                    fontSize: "0.875rem",
+                    color: "var(--muted)",
+                    lineHeight: 1.6,
+                  }}
+                >
                   {item.body}
                 </p>
               </motion.div>

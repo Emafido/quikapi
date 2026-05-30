@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { getBaseUrl } from "@/lib/utils";
+import CodeSnippet from "./CodeSnippet";
+import ApiTester from "./ApiTester";
 
 type Field = { name: string; type: string; required: boolean };
 type Resource = { name: string; fields: Field[] };
@@ -24,6 +26,8 @@ const METHODS = ["GET", "POST", "PUT", "DELETE"];
 
 export default function EndpointList({ apiId, schema }: EndpointListProps) {
   const [copied, setCopied] = useState("");
+  const [openSnippet, setOpenSnippet] = useState<string | null>(null);
+  const [openTester, setOpenTester] = useState<string | null>(null);
   const base = `${getBaseUrl()}/api/live/${apiId}`;
 
   function copy(text: string, key: string) {
@@ -69,20 +73,61 @@ export default function EndpointList({ apiId, schema }: EndpointListProps) {
             transition={{ delay: i * 0.1 }}
             style={{ padding: "1rem 1.25rem", borderBottom: "1px solid var(--border)" }}
           >
-            <p style={{ fontSize: "0.8rem", fontFamily: "var(--mono)", fontWeight: 600, color: "var(--muted)", marginBottom: "0.75rem" }}>
-              /{resource.name}
-            </p>
+            {/* Resource header */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
+              <p style={{ fontSize: "0.8rem", fontFamily: "var(--mono)", fontWeight: 600, color: "var(--muted)" }}>
+                /{resource.name}
+              </p>
+              <div style={{ display: "flex", gap: "0.4rem" }}>
+                <button
+                  onClick={() => {
+                    setOpenTester(openTester === resource.name ? null : resource.name);
+                    setOpenSnippet(null);
+                  }}
+                  style={{
+                    fontSize: "0.72rem",
+                    padding: "0.2rem 0.6rem",
+                    borderRadius: "0.375rem",
+                    border: "1px solid var(--border)",
+                    background: openTester === resource.name ? "#059669" : "transparent",
+                    color: openTester === resource.name ? "#fff" : "#059669",
+                    cursor: "pointer",
+                    fontFamily: "var(--mono)",
+                    transition: "all 0.15s",
+                  }}
+                >
+                  {openTester === resource.name ? "hide tester" : "test it"}
+                </button>
+                <button
+                  onClick={() => {
+                    setOpenSnippet(openSnippet === resource.name ? null : resource.name);
+                    setOpenTester(null);
+                  }}
+                  style={{
+                    fontSize: "0.72rem",
+                    padding: "0.2rem 0.6rem",
+                    borderRadius: "0.375rem",
+                    border: "1px solid var(--border)",
+                    background: openSnippet === resource.name ? "var(--accent)" : "transparent",
+                    color: openSnippet === resource.name ? "#fff" : "var(--accent)",
+                    cursor: "pointer",
+                    fontFamily: "var(--mono)",
+                    transition: "all 0.15s",
+                  }}
+                >
+                  {openSnippet === resource.name ? "hide code" : "view code"}
+                </button>
+              </div>
+            </div>
 
+            {/* Endpoint rows */}
             <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
               {METHODS.map((method) => {
                 const url = `${base}/${resource.name}${method === "PUT" || method === "DELETE" ? "?recordId=" : ""}`;
                 const key = `${method}-${resource.name}`;
                 const colors = METHOD_COLORS[method];
                 return (
-                  <div
-                    key={method}
-                    style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}
-                  >
+                  <div key={method} style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
                     <span style={{ fontSize: "0.7rem", fontFamily: "var(--mono)", fontWeight: 600, padding: "0.2rem 0.4rem", borderRadius: "0.25rem", background: colors.bg, color: colors.text, width: "3.5rem", textAlign: "center", flexShrink: 0 }}>
                       {method}
                     </span>
@@ -99,6 +144,24 @@ export default function EndpointList({ apiId, schema }: EndpointListProps) {
                 );
               })}
             </div>
+
+            {/* API Tester panel */}
+            {openTester === resource.name && (
+              <ApiTester
+                baseUrl={base}
+                resource={resource.name}
+                fields={resource.fields}
+              />
+            )}
+
+            {/* Code Snippet panel */}
+            {openSnippet === resource.name && (
+              <CodeSnippet
+                baseUrl={base}
+                resource={resource.name}
+                fields={resource.fields}
+              />
+            )}
           </motion.div>
         ))}
       </div>
