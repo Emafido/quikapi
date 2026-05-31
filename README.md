@@ -1,4 +1,4 @@
-```markdown
+
 # QuikAPI
 
 **Describe an API. Get a live one.**
@@ -86,4 +86,3 @@ This project was built as part of the [QuikDB BuildQuik Challenge](https://quikd
 ## License
 
 MIT
-```
