@@ -1,12 +1,5 @@
 {
   "compilerOptions": {
-    "typeRoots": [
-      "./node_modules/@types",
-      "./src/types"
-    ],
-    "types": [
-      "bun-types"
-    ],
     "lib": [
       "dom",
       "dom.iterable",
