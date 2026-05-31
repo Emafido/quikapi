@@ -1,8 +1,11 @@
-import Groq from "groq-sdk";
-
-export const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY!,
-});
+export function getGroqClient() {
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) {
+    throw new Error("GROQ_API_KEY is not set");
+  }
+  const Groq = require("groq-sdk");
+  return new Groq({ apiKey });
+}
 
 export const SCHEMA_SYSTEM_PROMPT = `You are an API schema generator. The user describes an API they want and you return ONLY a valid JSON object — no markdown, no explanation, no backticks.
 

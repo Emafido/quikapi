@@ -1,5 +1,7 @@
-import { groq, SCHEMA_SYSTEM_PROMPT } from "@/lib/groq";
+import { getGroqClient, SCHEMA_SYSTEM_PROMPT } from "@/lib/groq";
 import { NextRequest, NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   try {
@@ -8,6 +10,8 @@ export async function POST(req: NextRequest) {
     if (!prompt || typeof prompt !== "string") {
       return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
     }
+
+    const groq = getGroqClient();
 
     const completion = await groq.chat.completions.create({
       model: "llama-3.1-8b-instant",
@@ -20,7 +24,6 @@ export async function POST(req: NextRequest) {
     });
 
     const raw = completion.choices[0]?.message?.content ?? "";
-
     const parsed = JSON.parse(raw);
 
     return NextResponse.json({ schema: parsed });
