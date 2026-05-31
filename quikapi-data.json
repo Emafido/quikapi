@@ -6,6 +6,20 @@
       "description": "API for managing books",
       "schema": "{\"name\":\"Book API\",\"description\":\"API for managing books\",\"resources\":[{\"name\":\"books\",\"fields\":[{\"name\":\"title\",\"type\":\"string\",\"required\":true},{\"name\":\"author\",\"type\":\"string\",\"required\":true},{\"name\":\"published\",\"type\":\"number\",\"required\":false}]}]}",
       "createdAt": "2026-05-30T12:30:33.612Z"
+    },
+    {
+      "id": "cd52e452-ed38-4478-b294-264d7388b341",
+      "name": "FoodDeliveryAPI",
+      "description": "API for a food delivery application",
+      "schema": "{\"name\":\"FoodDeliveryAPI\",\"description\":\"API for a food delivery application\",\"resources\":[{\"name\":\"restaurants\",\"fields\":[{\"name\":\"name\",\"type\":\"string\",\"required\":true},{\"name\":\"address\",\"type\":\"string\",\"required\":true},{\"name\":\"phone_number\",\"type\":\"string\",\"required\":true},{\"name\":\"cuisine\",\"type\":\"string\",\"required\":false}]},{\"name\":\"menus\",\"fields\":[{\"name\":\"name\",\"type\":\"string\",\"required\":true},{\"name\":\"description\",\"type\":\"string\",\"required\":false},{\"name\":\"price\",\"type\":\"number\",\"required\":true},{\"name\":\"restaurant_id\",\"type\":\"number\",\"required\":true}]},{\"name\":\"orders\",\"fields\":[{\"name\":\"total\",\"type\":\"number\",\"required\":true},{\"name\":\"status\",\"type\":\"string\",\"required\":true},{\"name\":\"restaurant_id\",\"type\":\"number\",\"required\":true},{\"name\":\"customer_id\",\"type\":\"number\",\"required\":true}]}]}",
+      "createdAt": "2026-05-31T19:14:19.588Z"
+    },
+    {
+      "id": "e6a9e1f7-4cb2-4e29-ba00-fbc8e3f415ef",
+      "name": "Food Delivery API",
+      "description": "API for managing restaurants, menus, and orders for a food delivery app",
+      "schema": "{\"name\":\"Food Delivery API\",\"description\":\"API for managing restaurants, menus, and orders for a food delivery app\",\"resources\":[{\"name\":\"restaurants\",\"fields\":[{\"name\":\"id\",\"type\":\"string\",\"required\":true},{\"name\":\"address\",\"type\":\"string\",\"required\":true},{\"name\":\"phone_number\",\"type\":\"string\",\"required\":true},{\"name\":\"cuisine\",\"type\":\"string\",\"required\":false}]},{\"name\":\"menus\",\"fields\":[{\"name\":\"restaurant_id\",\"type\":\"number\",\"required\":true},{\"name\":\"name\",\"type\":\"string\",\"required\":true},{\"name\":\"description\",\"type\":\"string\",\"required\":false},{\"name\":\"price\",\"type\":\"number\",\"required\":true}]},{\"name\":\"orders\",\"fields\":[{\"name\":\"customer_id\",\"type\":\"number\",\"required\":true},{\"name\":\"restaurant_id\",\"type\":\"number\",\"required\":true},{\"name\":\"menu_id\",\"type\":\"number\",\"required\":true},{\"name\":\"status\",\"type\":\"string\",\"required\":true}]}]}",
+      "createdAt": "2026-05-31T19:15:42.822Z"
     }
   ],
   "records": []
