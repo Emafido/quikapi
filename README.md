@@ -9,11 +9,12 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://typescriptlang.org)
 [![Groq](https://img.shields.io/badge/Groq_AI-F55036?style=for-the-badge&logo=data:image/svg+xml;base64,&logoColor=white)](https://groq.com)
 [![Built for BuildQuik](https://img.shields.io/badge/Built_for-%23BuildQuik-10B981?style=for-the-badge)](https://quikdb.com)
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-quik.quikdb.net-6366f1?style=for-the-badge)](https://quik.quikdb.net)
 
 **Turn plain English into fully live REST APIs in seconds.**
 No backend code. No setup. No waiting.
 
-[🚀 Try it Live](#) · [📖 How it Works](#-how-it-works) · [🛠 Getting Started](#-getting-started)
+[🚀 Try it Live](https://quik.quikdb.net) · [📖 How it Works](#-how-it-works) · [🛠 Getting Started](#-getting-started)
 
 ---
 
