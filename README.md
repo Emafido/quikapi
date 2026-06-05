@@ -13,7 +13,7 @@
 **Turn plain English into fully live REST APIs in seconds.**
 No backend code. No setup. No waiting.
 
-[🚀 Try it Live](#) · [📖 How it Works](#-how-it-works) · [🛠 Getting Started](#-getting-started)
+[🚀 Try it Live](quik.quikdb.net) · [📖 How it Works](#-how-it-works) · [🛠 Getting Started](#-getting-started)
 
 ---
 
