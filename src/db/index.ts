@@ -1,7 +1,9 @@
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import { join } from "path";
 
-const DB_PATH = join(process.cwd(), "quikapi-data.json");
+const DB_PATH = process.env.NODE_ENV === "production"
+  ? "/tmp/quikapi-data.json"
+  : join(process.cwd(), "quikapi-data.json");
 
 interface Api {
   id: string;
@@ -36,11 +38,15 @@ function readDB(): DB {
 }
 
 function writeDB(data: DB): void {
-  writeFileSync(DB_PATH, JSON.stringify(data, null, 2), "utf-8");
+  try {
+    writeFileSync(DB_PATH, JSON.stringify(data, null, 2), "utf-8");
+  } catch (err) {
+    console.error("Failed to write DB:", err);
+    throw err;
+  }
 }
 
 export const db = {
-  // APIs
   getAllApis(): Api[] {
     return readDB().apis.sort((a, b) =>
       a.createdAt.localeCompare(b.createdAt)
@@ -66,7 +72,6 @@ export const db = {
     writeDB(data);
   },
 
-  // Records
   getRecords(apiId: string, resource: string): Record[] {
     return readDB().records.filter(
       (r) => r.apiId === apiId && r.resource === resource
