@@ -1,9 +1,12 @@
+import Groq from "groq-sdk";
+
 export function getGroqClient() {
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
-    throw new Error("GROQ_API_KEY is not set");
+    throw new Error(
+      "GROQ_API_KEY is not set. Please add GROQ_API_KEY in your Vercel Project Settings (Settings > Environment Variables)."
+    );
   }
-  const Groq = require("groq-sdk");
   return new Groq({ apiKey });
 }
 
