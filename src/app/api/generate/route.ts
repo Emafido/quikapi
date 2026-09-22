@@ -33,16 +33,61 @@ export async function POST(req: NextRequest) {
 
     const groq = getGroqClient();
 
-    const completion = await groq.chat.completions.create({
-      model: "llama-3.1-8b-instant",
-      messages: [
-        { role: "system", content: SCHEMA_SYSTEM_PROMPT },
-        { role: "user", content: prompt.trim() },
-      ],
-      response_format: { type: "json_object" },
-      temperature: 0.3,
-      max_tokens: 1000,
-    });
+    const candidateModels = [
+      process.env.GROQ_MODEL,
+      "llama-3.2-3b-preview",
+      "openai/gpt-oss-20b",
+      "llama-3.2-1b-preview",
+    ].filter(Boolean) as string[];
+
+    let completion = null;
+    let lastError: unknown = null;
+
+    for (const model of candidateModels) {
+      try {
+        const isReasoningModel =
+          model.startsWith("openai/gpt-oss") ||
+          model.includes("r1") ||
+          model.includes("qwq");
+
+        completion = await groq.chat.completions.create({
+          model,
+          messages: [
+            { role: "system", content: SCHEMA_SYSTEM_PROMPT },
+            { role: "user", content: prompt.trim() },
+          ],
+          response_format: { type: "json_object" },
+          temperature: 0.3,
+          max_tokens: 1500,
+          ...(isReasoningModel ? { reasoning_format: "hidden" } : {}),
+        });
+
+        if (completion) break;
+      } catch (err: unknown) {
+        lastError = err;
+        const errMsg = err instanceof Error ? err.message : String(err);
+        const errStatus = (err as { status?: number })?.status;
+        const errCode = (err as { code?: string })?.code;
+
+        // If the model does not exist or has been deprecated, fall back to next candidate
+        if (
+          errStatus === 404 ||
+          errCode === "model_not_found" ||
+          errMsg.includes("does not exist") ||
+          errMsg.includes("model_not_found")
+        ) {
+          console.warn(`Groq model "${model}" unavailable, trying fallback...`);
+          continue;
+        }
+
+        // For other errors (invalid API key, rate limits, etc.), rethrow
+        throw err;
+      }
+    }
+
+    if (!completion) {
+      throw lastError || new Error("Failed to generate schema from AI model");
+    }
 
     const raw = completion.choices[0]?.message?.content ?? "";
     const cleaned = cleanJsonString(raw);
