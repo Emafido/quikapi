@@ -4,7 +4,7 @@ export function getGroqClient() {
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
     throw new Error(
-      "GROQ_API_KEY is not set. Please add GROQ_API_KEY in your Vercel Project Settings (Settings > Environment Variables)."
+      "GROQ_API_KEY is not set. Please add GROQ_API_KEY to your .env.local file (for local development) or in your Vercel Project Settings."
     );
   }
   return new Groq({ apiKey });

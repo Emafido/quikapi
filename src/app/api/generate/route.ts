@@ -35,9 +35,8 @@ export async function POST(req: NextRequest) {
 
     const candidateModels = [
       process.env.GROQ_MODEL,
-      "llama-3.2-3b-preview",
       "openai/gpt-oss-20b",
-      "llama-3.2-1b-preview",
+      "openai/gpt-oss-120b",
     ].filter(Boolean) as string[];
 
     let completion = null;
@@ -57,26 +56,35 @@ export async function POST(req: NextRequest) {
             { role: "user", content: prompt.trim() },
           ],
           response_format: { type: "json_object" },
-          temperature: 0.3,
+          temperature: 0.2,
           max_tokens: 1500,
-          ...(isReasoningModel ? { reasoning_format: "hidden" } : {}),
+          ...(isReasoningModel
+            ? {
+                reasoning_format: "hidden" as const,
+                reasoning_effort: "low" as const,
+              }
+            : {}),
         });
 
         if (completion) break;
       } catch (err: unknown) {
         lastError = err;
-        const errMsg = err instanceof Error ? err.message : String(err);
+        const errMsg = (err instanceof Error ? err.message : String(err)).toLowerCase();
         const errStatus = (err as { status?: number })?.status;
         const errCode = (err as { code?: string })?.code;
 
-        // If the model does not exist or has been deprecated, fall back to next candidate
-        if (
+        // If the model does not exist or has been decommissioned, fall back to next candidate
+        const isModelAvailabilityError =
           errStatus === 404 ||
           errCode === "model_not_found" ||
+          errCode === "model_decommissioned" ||
+          errMsg.includes("decommissioned") ||
           errMsg.includes("does not exist") ||
-          errMsg.includes("model_not_found")
-        ) {
-          console.warn(`Groq model "${model}" unavailable, trying fallback...`);
+          errMsg.includes("not found") ||
+          errMsg.includes("no longer supported");
+
+        if (isModelAvailabilityError) {
+          console.warn(`Groq model "${model}" unavailable (${errMsg}), trying fallback...`);
           continue;
         }
 
